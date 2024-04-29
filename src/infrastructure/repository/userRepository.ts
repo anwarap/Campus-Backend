@@ -9,7 +9,6 @@ class  UserRepository implements UserInterface {
         const User = new UserModel(user);
         const savedUser = await User.save()
         .then((res)=>{
-            console.log(`succes`,res)
             return res;
         })
         .catch((err)=>{
@@ -25,11 +24,21 @@ class  UserRepository implements UserInterface {
     }
 
     //Find user by id
-    async findUserById(user: string): Promise<any> {
-        const userFound = await UserModel.findById(user);
+    async findUserById(id: string): Promise<any> {
+        const userFound = await UserModel.findById(id);
         return userFound;
     }
 
+    async findAllUsers(): Promise<any> {
+        const allUsers = await UserModel.find();
+        return allUsers;
+    }
+    async findAndUpdate(user: User): Promise<any> {
+        if(user._id){
+            const updateUser = await UserModel.findByIdAndUpdate(user._id,user,{new:true});
+            return updateUser;
+        }
+    }
 
 }
 

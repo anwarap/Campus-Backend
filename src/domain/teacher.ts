@@ -1,5 +1,4 @@
-
-export default interface User {
+export default interface Teacher {
     _id?:string,
     name:string,
     email:string,

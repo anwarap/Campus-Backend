@@ -48,6 +48,13 @@ class UserUsecase {
                     }
                 }
             };
+
+            if(userFound.isBlocked){
+                return {
+                    status:401,
+                    data:{message:"You are blocked by admin"}
+                }
+            }
             const passwordMatch = await this.Encrypt.compare(user.password,userFound.password);
 
             if(!passwordMatch){
@@ -79,7 +86,6 @@ class UserUsecase {
 
     async isEmailExist(email:string){
         try{
-            console.log('emmm',email)
             const userExit = await this.userInterface.findByEmail(email);
             return {
                 status:200,
@@ -97,7 +103,6 @@ class UserUsecase {
         try {
             const otp = await this.generateOtp.genOtp(6);
             const verify = this.sendOtp.sendVerificationMail(email,otp);
-            console.log(verify,'verify')
             return{
                 status:200,
                 otp,

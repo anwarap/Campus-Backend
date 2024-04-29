@@ -25,7 +25,6 @@ class SendOtp {
         this.transporter.sendMail(mailOptions,(err)=>{
             if(err) {
                 console.log(err);
-                console.log('heyeye')
             }else{
                 console.log('Verification is successful')
             }

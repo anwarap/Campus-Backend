@@ -1,12 +1,11 @@
-import { userAuth } from "../middleware/userAuth";
 import { userController } from "../utils/controlers";
-
 import express from "express";
-const route = express.Router();
+const userRoute = express.Router();
 
-route.post("/register", (req, res)=>userController.userSignUp(req, res));
-route.post("/verifyOtp", (req, res)=>userController.UserOtpVerification(req, res));
-route.get("/resend-otp", (req, res)=>userController.resendOtp(req, res));
-route.post("/login", (req, res)=>userController.userLogin(req, res));
+userRoute.post("/signup", (req, res)=>userController.userSignUp(req, res));
+userRoute.post("/verify", (req, res)=>userController.UserOtpVerification(req, res));
+userRoute.post("/signin", (req, res)=>userController.userLogin(req, res));
+userRoute.post("/logout", (req, res)=>userController.logout(req, res));
+userRoute.get("/resend-otp",(req,res)=>userController.resendOtp(req, res));
 
-export default route;
+export default userRoute;
