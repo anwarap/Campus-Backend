@@ -6,6 +6,7 @@ export default interface Course {
  category:string,
  level: string,
  description: string,
+ price: number,
  cover:string,
  preview:string,
  instructor:string|ObjectId,

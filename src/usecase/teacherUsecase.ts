@@ -118,6 +118,38 @@ class TeacherUsecase {
             }
         }
     }
+
+    async forgetPassword1(email:string){
+        const teacher = await this.teacherInterface.findByEmail(email);
+        if(teacher){
+            return {
+                status:200,
+                data:"teacher Exists"
+            }
+        }else{
+            return {
+                status:401,
+                data:{message:"teacher does not exist"}
+            }
+        }
+    }
+
+    async forgetPassword3(data:any){
+        const teacher = await this.teacherInterface.findByEmail(data.email);
+        if(teacher){
+            teacher.password = await this.Encrypt.createHash(data.password);
+            await this.teacherInterface.saveTeacher(teacher);
+            return {
+                status:200,
+                data:"password Updated",
+            }
+        }else{
+            return {
+                status:401,
+                data:{message:"Password is not matching"}
+            }
+        }
+    }
 }
 
 

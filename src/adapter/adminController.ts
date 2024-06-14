@@ -50,7 +50,7 @@ class AdminController {
     async blockUser(req: Request, res: Response){
         try {
             const user = await this.adminUsecase.blockUser(req?.params.id);
-            console.log(user,'user')
+            
             return res.status(user.status).json(user.data);
         } catch (error) {
             return res.status(500).json({
@@ -65,7 +65,6 @@ class AdminController {
     async blockTeacher(req: Request, res: Response){
         try {
             const teacher = await this.adminUsecase.blockTeacher(req?.params.id);
-            console.log(teacher,'teacehr')
             return res.status(teacher.status).json(teacher.data);
         } catch (error) {
             return res.status(500).json({

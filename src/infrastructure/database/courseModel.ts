@@ -6,10 +6,11 @@ export interface ICourse extends Document {
   category: String;
   level: String;
   description: String;
+  price:Number;
   cover: String;
   preview: String;
   instructor: String | ObjectId;
-  lesson: Array<String>;
+  lessons: Array<String>;
   isApproved: boolean;
 }
 
@@ -31,6 +32,10 @@ const CourseSchema: Schema = new Schema({
         type: String,
         required: true
     },
+    price:{
+        type: Number,
+        required: true
+    },
     cover:{
         type: String,
         required: true
@@ -43,11 +48,10 @@ const CourseSchema: Schema = new Schema({
         type:mongoose.Types.ObjectId,
         ref:"User"
     },
-    lessson:[
+    lessons:[
         {
             content:String,
             title:String,
-            duration:Number,
         }
     ],
     isApproved:{

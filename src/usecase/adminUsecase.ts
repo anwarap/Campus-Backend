@@ -107,7 +107,6 @@ class AdminUsecase {
             if(user){
                 const {isBlocked, ...userData} = user.toObject();
                 const blockedUser = {...userData, isBlocked:!user.isBlocked};
-                console.log(blockedUser,'blocked user')
                 await this.userInterface.findAndUpdate(blockedUser);
                 return {
                     status:200,
@@ -135,7 +134,6 @@ class AdminUsecase {
         if(teacher){
             const {isBlocked,...teacherData} = teacher.toObject();
             const blockTeacher = {...teacherData, isBlocked: !teacher.isBlocked};
-            console.log(blockTeacher,'blocked')
             await this.teacherInterface.findAndUpdate(blockTeacher);
             return {
                 status:200,

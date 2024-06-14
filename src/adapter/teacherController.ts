@@ -9,7 +9,6 @@ class TeacherController {
         try {
             const newTeacher = req.body;
             const teacherExists = await this.teacherUsecase.isEmailExist(newTeacher.email);
-            console.log(teacherExists,'teacherExitsts')
             if(teacherExists.data ){
                 return res
                 .status(401)
@@ -57,6 +56,54 @@ class TeacherController {
         }
      }
 
+     async forgetPassword1(req: Request, res: Response){
+        try {
+            const email = req.body.email;
+            const teacher = await this.teacherUsecase.forgetPassword1(email);
+            const otp = await this.teacherUsecase.verifyMail(email);
+            console.log( otp,'sfswf')
+
+            res.status(teacher.status).json(teacher.data);
+            req.app.locals.otp = otp;
+
+        } catch (error) {
+            return res.status(500).json({
+                data:{status:500, message:"Internal Server Error",
+                    error:(error as Error).message
+                }});
+        }
+     }
+
+     async forgetPassword2(req: Request, res: Response){
+        try {
+            console.log(req.app.locals.otp,'otp')
+            if(req.body.otp != req.app.locals.otp.otp){
+                res.status(401).json({data:{message:"Otp does not match"}})
+            }else{
+                res.status(200).json("Otp verification successful")
+            }
+        } catch (error) {
+            return res.status(500).json({
+                data:{status:500, message:"Internal Server Error",
+                    error:(error as Error).message
+                }});
+        }
+     }
+
+     async forgetPassword3(req: Request, res: Response){
+        try {
+            const teacher = await this.teacherUsecase.forgetPassword3(req.body);
+            console.log(teacher,'teacher')
+            res.status(teacher.status).json(teacher.data);
+        } catch (error) {
+            console.log('dadaaa')
+            return res.status(500).json({
+                data:{status:500, message:"Internal Server Error",
+                    error:(error as Error).message
+                }});
+        }
+     }
+
     async teacherOtpVerification(req:Request,res:Response){
         try {
             const teacherToSave:Teacher = req.app.locals.teacher as Teacher;
@@ -81,7 +128,6 @@ class TeacherController {
     async teacherLogin(req: Request, res: Response){
         try {
             const teacher = req.body;
-            console.log(teacher)
             const teacherData = await this.teacherUsecase.teacherLogin(teacher);
             return res.status(teacherData.status).json(teacherData);
         } catch (error) {

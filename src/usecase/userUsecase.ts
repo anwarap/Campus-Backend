@@ -115,6 +115,41 @@ class UserUsecase {
             }
         }
     }
+
+    async forgetPassword1(email:string){
+        const user = await this.userInterface.findByEmail(email);
+        if(user){
+            return{
+                status:200,
+                data:{message:"user Exists"}
+                    
+            }
+        }else{
+            return {
+                status:401,
+                data:{message:"User does not exist"}
+                
+            }
+        }
+    }
+
+    async forgetPassword3(data:any){
+        const user = await this.userInterface.findByEmail(data.email);
+        if(user){
+            user.password = await this.Encrypt.createHash(data.password);
+            await this.userInterface.saveUser(user);
+            return {
+                status:200,
+                data:"Password updated"
+            }
+        }else{
+            return {
+                status:401,
+                data:{message:"password not matching"}
+                
+            }
+        }
+    }
 }
 
 

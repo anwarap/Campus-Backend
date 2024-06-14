@@ -1,6 +1,7 @@
 import { Request,Response, response } from "express";
 import UserUsecase from "../usecase/userUsecase";
 import User from "../domain/userd";
+import { isCallSignatureDeclaration } from "typescript";
 
 
 class UserController {
@@ -43,6 +44,8 @@ class UserController {
         }
     }
 
+
+
     async resendOtp(req: Request, res: Response){
         try {
             const user = req.app.locals.user;
@@ -55,11 +58,53 @@ class UserController {
             },1000 * 30);
             return res.status(200).json({response:emailResponse});
         } catch (error) {
-            console.log('here')
             return res.status(500).json({
                 data:{status:500, message:"Internal Server Error",
                     error:(error as Error).message
                 }});
+        }
+    }
+
+    async forgotPassword1(req: Request, res: Response){
+        try {
+            const email = req.body.email;
+            const user = await  this.userUsecase.forgetPassword1(email);
+            const  otp = await this.userUsecase.verifyMail(email);
+            
+            res.status(user.status).json(user.data);
+            req.app.locals.otp = otp
+        } catch (error) {
+            return res.status(500).json({
+                data:{status:500, message:"Internal Server Error",
+                    error:(error as Error).message
+                }});
+        }
+    }
+
+    async forgetPassword2(req: Request , res: Response){
+        try {
+            if(req.body.otp != req.app.locals.otp){
+                res.status(401).json({data:{message:"otp does not match"}})
+            }else{
+                res.status(200).json("Otp verification successful")
+            }
+        } catch (error) {
+            return res.status(500).json({
+                data:{status:500, message:"Internal Server Error",
+                    error:(error as Error).message
+                }});
+        }
+    }
+
+    async forgetPassword3(req: Request, res: Response){
+        try {
+            const user = await this.userUsecase.forgetPassword3(req.body)
+            res.status(user.status).json(user.data);
+        } catch (error) {
+            return res.status(500).json({
+                data:{status:500, message:"Internal Server Error",
+                    error:(error as Error).message
+                }});  
         }
     }
 

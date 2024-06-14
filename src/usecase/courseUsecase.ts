@@ -11,12 +11,14 @@ class CourseUsecase {
 
     async createCourse(course: Course){
         try {
+            console.log(course.cover,'wwwww')
             if(!course.title||
                 !course.description||
                 !course.category ||
                 !course.cover ||
                 !course.level ||
-                !course.preview
+                !course.preview||
+                !course.price
             ) {
                 return {
                     status:400,
@@ -36,7 +38,6 @@ class CourseUsecase {
             }
            }
         } catch (error) {
-            console.log(error)
             return {
                 status: 400,
                 data : {
